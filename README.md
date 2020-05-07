@@ -1,8 +1,8 @@
 # Getting-and-Cleaning-Data-Assignment
 
-This ReadMe explains how the script works and how each section connected.
+This ReadMe explains how the script works and how each section is connected.
 
-In this assignment, we were given raw data from the UCI HAR Dataset and asked to generate a tidy data set with the average of each mean variable for each activity and each subject. My script 'run_analysis.R' achieves just that. See script with explanations below. Data can be read into R with read.table(header = TRUE).
+In this assignment, we were given raw data from the UCI HAR Dataset and asked to generate a tidy data set with the average of each mean variable for each activity and each subject. My script 'run_analysis.R' achieves just that. See script with explanations below. Data file can be read into R with read.table(header = TRUE).
 
 ## Load packages to be used in script
 
@@ -31,7 +31,7 @@ activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt", stringsAs
 ```
 
 ## 1. Create one data set
-The goal here is to make a single, tidy data set comprised of all data read in above. I first merged the 'test' data, as well as assigned names to the variable to make later merging easy. Then I merged the training data, along with the same names used above. Creating the test and training data sets to have the same variable names make merging these two data sets really easy with the 'rbind' function. It also took care of step 4 below. 
+The goal here is to make a single, tidy data set comprised raw data read in above. I first merged the 'test' data (subject IDs, activities, and measurements), as well as assigned names to the variable to make later merging easy. Then I merged the 'training' data, along with the same names used above. Creating the test and training data sets to have the same variable names make merging these two data sets really easy with the 'rbind' function. It also took care of step 4 below. 
 
 Single merged data set is called: 'data'
 
@@ -51,7 +51,7 @@ data <- rbind(test_data, train_data)                            #merge test and 
 
 
 ## 2. Extract only the measurements on the mean and standard deviation for each measurement
-By reading the 'features_info.txt' included in the raw data set, you can deduce that measurements on the mean and standard deviation for the measurements included "mean" "Mean" "std" or "Std". I used the 'grep' function so search the variable names for those patterns, then used to 'select' function (dplyr package) to extract data that meant the requirements and created a new data set called 'select_data' that only includes only the measurements on the mean and standard deviation for each measurement, as well as participant ID and activity.
+By reading the 'features_info.txt' included in the raw data set, you can deduce that measurements on the mean and standard deviation for the measurements included "mean" "Mean" "std" or "Std" in their name. I used the 'grep' function along with normal expressions to find the variable names that include those patterns, then used to 'select' function (dplyr package) to extract data that met the requirements. The extracted data set is called 'select_data' and only includes the measurements on the mean and standard deviation for each measurement, and preserves participant ID and activity.
 
 ```
 mean_cols <- grep("[Mm]ean", colnames(data), value = TRUE)
