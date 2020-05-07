@@ -38,7 +38,7 @@ select_data <- select(data, subjectID, activity, mean_cols, std_cols)
 
 ## 3. Uses descriptive activity names to name the activities in the data set
 
-for(i in 1:6){
+for(i in seq_along(activity_labels$V2)){
         select_data$activity <- sub(activity_labels$V1[i], activity_labels$V2[i], select_data$activity)
 }
 
@@ -54,4 +54,5 @@ names(select_data) <- sub("^V[0-9]+ ", "", names(select_data))  #remove "V## " f
 
 select_data_summary <- select_data %>%
         group_by(subjectID, activity) %>%
-        summarize_all(list(mean = mean))         
+        summarize_all(list(mean = mean))
+write.table(select_data_summary,"./run_analysis.txt", row.names = FALSE)
