@@ -3,7 +3,7 @@
 library(dplyr)
 library(tibble)
 
-## 0. Download and read in data
+## 0. Read in data. Per directions "can be run as long as the Samsung data is in your working directory."
 
 x_test <- read.table("./UCI HAR Dataset/test/X_test.txt")
 y_test <- read.table("./UCI Har Dataset/test/y_test.txt")
@@ -38,12 +38,9 @@ select_data <- select(data, subjectID, activity, mean_cols, std_cols)
 
 ## 3. Uses descriptive activity names to name the activities in the data set
 
-ac_names_before <- unique(select_data$activity)                                    
 for(i in 1:6){
         select_data$activity <- sub(activity_labels$V1[i], activity_labels$V2[i], select_data$activity)
 }
-ac_names_after <- unique(select_data$activity)
-list("activity names before" = ac_names_before, "activity names after" = ac_names_after) #demonstrate name change
 
 ## 4. Appropriately labels the data set with descriptive variable names.
 ## Descriptive names achieved in step 1 above using 'colnames' and 'rename' functions. 
