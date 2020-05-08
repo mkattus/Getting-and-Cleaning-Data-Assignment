@@ -33,9 +33,8 @@ data <- rbind(test_data, train_data)                            #merge test and 
 
 ## 2. Extracts only the measurements on the mean and standard deviation for each measurement.
 
-mean_cols <- grep("[Mm]ean", colnames(data), value = TRUE)
-std_cols <- grep("[Ss]td", colnames(data), value = TRUE)
-select_data <- select(data, subjectID, activity, mean_cols, std_cols)
+select_cols <- grep(("[Mm]ean|[Ss]td"), colnames(data), value = TRUE)
+select_data <- select(data, subjectID, activity, all_of(select_cols))
 
 ## 3. Uses descriptive activity names to name the activities in the data set
 
@@ -45,10 +44,14 @@ for(i in seq_along(activity_labels$V2)){
 
 ## 4. Appropriately labels the data set with descriptive variable names.
 ## Descriptive names achieved in step 1 above using 'colnames' and 'rename' functions. 
-## Further cleaning below:   
+## Further cleaning below to make more readable:   
 
 select_data <- as_tibble(select_data)                           #make data nicer to work with
 names(select_data) <- sub("^V[0-9]+ ", "", names(select_data))  #remove "V## " from beginning of column names
+names(select_data) <- gsub("-", "", names(select_data))         #remove "-"
+names(select_data) <- sub("std", "Std", names(select_data))     #make STD stand out
+names(select_data) <- sub("mean", "Mean", names(select_data))   #make Mean stand out
+names(select_data) <- gsub("\\()", "", names(select_data))      #remove "()"
 
 ## 5. From the data set in step 4, creates a second, independent tidy data set with the 
 ## average of each variable for each activity and each subject.
