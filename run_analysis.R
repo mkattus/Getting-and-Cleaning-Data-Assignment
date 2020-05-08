@@ -3,6 +3,7 @@
 library(dplyr)
 library(tibble)
 
+## Before running, make sure UCI HAR data set unzipped in working directory
 ## 0. Read in data. Per directions "can be run as long as the Samsung data is in your working directory."
 
 x_test <- read.table("./UCI HAR Dataset/test/X_test.txt")
