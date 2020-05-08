@@ -77,7 +77,7 @@ names(select_data) <- sub("^V[0-9]+ ", "", names(select_data))  #remove "V## " f
 ```
 
 ## 5. Create a second, independent tidy data set with the average of each variable for each activity and each subject
-'dplyr' makes this very easy. I simply grouped the 'select_data' set by 'activity' and 'subjectID' then created a summary of all variable based on the mean function. The data set is tidy because: 1) Each variable forms a column. 2) Each observation forms a row. 3) Each type of observational unit forms a table (there is only one type of observational unit, therefore there is only one table). (source: Hadley Wickham's **Tidy data.** https://vita.had.co.nz/papers/tidy-data.html) Output is a data set as a txt file created with write.table() using row.name=FALSE per instructions.
+'dplyr' makes this very easy. I simply grouped the 'select_data' set by 'activity' and 'subjectID' then created a summary of all variable based on the mean function. The output values are means of each variable (both the means and standard deviations), so I inserted "-mean" to the end of each variable name. The data set is tidy because: 1) Each variable forms a column. 2) Each observation forms a row. 3) Each type of observational unit forms a table (there is only one type of observational unit, therefore there is only one table). (source: Hadley Wickham's **Tidy data.** https://vita.had.co.nz/papers/tidy-data.html) Output is a data set as a txt file created with write.table() using row.name=FALSE per instructions. 
 
 ```
 select_data_summary <- select_data %>%
