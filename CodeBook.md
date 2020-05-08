@@ -5,7 +5,7 @@ date: "5/7/2020"
 output: pdf_document
 ---
 
-*All information below taken from UCI HAR Dataset provided for assignmenT with some additions and clarifications.
+*All information below taken from UCI HAR Dataset provided for assignment with some additions and clarifications.*
 
 ## Study design
 
