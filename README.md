@@ -14,7 +14,7 @@ library(tibble)
 ```
 
 ## 0. Read in data
-Per directions, this code will run "as long as the Samsung data is in your working directory." Samsung data found here: https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+Per directions, this code will run "as long as the Samsung data is in your working directory." Must have data set loaded in working directory for script to run! Samsung data found here: https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
 
 Each file assigned to readable and intuitive names to make later manipulation easy.
 
@@ -54,9 +54,8 @@ data <- rbind(test_data, train_data)                            #merge test and 
 By reading the 'features_info.txt' included in the raw data set, you can deduce that measurements on the mean and standard deviation for the measurements included "mean" "Mean" "std" or "Std" in their name. I used the 'grep' function along with normal expressions to find the variable names that include those patterns, then used to 'select' function (dplyr package) to extract data that met the requirements. The extracted data set is called 'select_data' and only includes the measurements on the mean and standard deviation for each measurement, and preserves participant ID and activity.
 
 ```
-mean_cols <- grep("[Mm]ean", colnames(data), value = TRUE)
-std_cols <- grep("[Ss]td", colnames(data), value = TRUE)
-select_data <- select(data, subjectID, activity, mean_cols, std_cols)
+select_cols <- grep(("[Mm]ean|[Ss]td"), colnames(data), value = TRUE)
+select_data <- select(data, subjectID, activity, all_of(select_cols))
 ```
 
 ## 3. Use descriptive activity names to name the activities in the data set
@@ -69,11 +68,15 @@ for(i in seq_along(activity_labels$V2)){
 ```
 
 ## 4. Appropriately label the data set with descriptive variable names
-Descriptive names achieved in step 1 above using 'colnames' and 'rename' functions. The variable are named according to the conventions layed out in the Code Book (see repository). Variable names are found in 'features.txt' from raw data. They are descriptive because they include the signal origin (acc = accelerometer or gyro = gyroscope), direction component (X,Y,Z), time domain vs. fast fourier transformation (t vs. f), body and gravity acceleration signals (BodyAcc vs. GravityAcc), jerk signals (Jerk), and magnitudes (Mag). Further cleaning below:   
+Descriptive names achieved in step 1 above using 'colnames' and 'rename' functions. The variable are named according to the conventions layed out in the Code Book (see repository). Variable names are found in 'features.txt' from raw data. They are descriptive because they include the signal origin (acc = accelerometer or gyro = gyroscope), direction component (X,Y,Z), time domain signal vs. frequency domain signal (t vs. f), body and gravity acceleration signals (BodyAcc vs. GravityAcc), jerk signals (Jerk), and magnitudes (Mag). Further cleaning to make easier to read below:   
 
 ```
 select_data <- as_tibble(select_data)                           #make data nicer to work with
 names(select_data) <- sub("^V[0-9]+ ", "", names(select_data))  #remove "V## " from beginning of column names
+names(select_data) <- gsub("-", "", names(select_data))         #remove "-"
+names(select_data) <- sub("std", "Std", names(select_data))     #make STD stand out
+names(select_data) <- sub("mean", "Mean", names(select_data))   #make Mean stand out
+names(select_data) <- gsub("\\()", "", names(select_data))      #remove "()"
 ```
 
 ## 5. Create a second, independent tidy data set with the average of each variable for each activity and each subject
